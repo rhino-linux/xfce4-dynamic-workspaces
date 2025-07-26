@@ -211,6 +211,8 @@ impl DynamicWorkspaces {
         // Get current workspace number
         let workspace_num = self.screen.get_active_workspace().map(|ws| ws.get_number());
         // Get current workspaces using wmctrl
+        // The user probably has at most like 10 desktops.
+        #[allow(clippy::naive_bytecount)]
         let workspaces = wmctrl::list_desktops()
             .stdout
             .iter()
@@ -309,19 +311,23 @@ fn main() {
     let mut debug = false;
     let mut notify = true;
 
-    for arg in &args {
-        if arg == "--debug" {
-            println!("Debug mode enabled");
-            debug = true;
-        } else if arg == "--no-notify" {
-            println!("Notifications disabled");
-            notify = false;
-        }
-    }
-
-    let cstrings: Vec<CString> = std::env::args()
-        .map(|arg| CString::new(arg).unwrap())
-        .collect();
+    let cstrings = args
+        .iter()
+        .map(|arg| {
+            match arg.as_str() {
+                "--debug" => {
+                    println!("Debug mode enabled");
+                    debug = true;
+                }
+                "--no-notify" => {
+                    println!("Notifications disabled");
+                    notify = false;
+                }
+                _ => {}
+            }
+            CString::new(arg.as_str()).unwrap()
+        })
+        .collect::<Vec<CString>>();
 
     let mut c_args: Vec<*mut c_char> = cstrings
         .iter()
