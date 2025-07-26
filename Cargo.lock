@@ -1732,7 +1732,7 @@ dependencies = [
 
 [[package]]
 name = "xfce4-dynamic-workspaces"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "gdk-sys 0.18.2",
  "glib",
