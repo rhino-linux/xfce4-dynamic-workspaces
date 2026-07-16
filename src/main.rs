@@ -15,10 +15,8 @@ extern "C" fn workspace_callback(
     _data: *mut gobject_sys::GObject,
     user_data: glib_sys::gpointer,
 ) {
-    unsafe {
-        let workspaces = &mut *user_data.cast::<DynamicWorkspaces>();
-        workspaces.handle_dynamic_workspaces();
-    }
+    let workspaces = unsafe { &mut *user_data.cast::<DynamicWorkspaces>() };
+    workspaces.handle_dynamic_workspaces();
 }
 
 #[cfg(feature = "notify")]
@@ -27,10 +25,8 @@ extern "C" fn notify_callback(
     _data: *mut gobject_sys::GObject,
     user_data: glib_sys::gpointer,
 ) {
-    unsafe {
-        let workspaces = &mut *user_data.cast::<DynamicWorkspaces>();
-        workspaces.update_notification();
-    }
+    let workspaces = unsafe { &mut *user_data.cast::<DynamicWorkspaces>() };
+    workspaces.update_notification();
 }
 
 struct DynamicWorkspaces {
@@ -337,11 +333,9 @@ fn main() {
     let mut argc = c_args.len() as c_int;
     let mut argv_ptr = c_args.as_mut_ptr();
 
-    unsafe {
-        if gdk_sys::gdk_init_check(&raw mut argc, &raw mut argv_ptr) == 0 {
-            eprintln!("`gdk_init_check` failed to start");
-            std::process::exit(1);
-        }
+    if unsafe { gdk_sys::gdk_init_check(&raw mut argc, &raw mut argv_ptr) } == 0 {
+        eprintln!("`gdk_init_check` failed to start");
+        std::process::exit(1);
     }
 
     gtk::init().expect("Failed to initialize GTK");
