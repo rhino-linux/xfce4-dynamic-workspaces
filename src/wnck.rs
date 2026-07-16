@@ -96,12 +96,6 @@ pub struct Workspace {
     workspace: *mut WnckWorkspace,
 }
 
-impl PartialEq<&Workspace> for Workspace {
-    fn eq(&self, other: &&Workspace) -> bool {
-        self.workspace == other.workspace
-    }
-}
-
 impl Workspace {
     pub fn get_number(&self) -> i32 {
         unsafe { wnck_workspace_get_number(self.workspace) }

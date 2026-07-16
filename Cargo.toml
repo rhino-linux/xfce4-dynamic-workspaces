@@ -20,6 +20,7 @@ gtk = "0.18"
 gobject-sys = "0.8.0"
 notify-rust = { version = "4.11.7", optional = true, default-features = false, features = [
     "zbus",
+    "async",
     "serde",
 ] }
 
